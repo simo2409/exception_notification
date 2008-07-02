@@ -21,9 +21,19 @@ to generate error emails (typically ApplicationController):
     ...
   end
 
-Then, specify the email recipients in your environment:
-
+Then, specify the email recipients in your environment.
+You can both set an array like this:
   ExceptionNotifier.exception_recipients = %w(joe@schmoe.com bill@schmoe.com)
+Or ask to fetch the array from a remote file (it's useful if you have many apps and you want update recipients in just one place) like that:
+  ExceptionNotifier.fetch_exception_recipients(url)
+where <url> is the url of an yaml file with the recipients array.
+An example of the yaml file is:
+  [user1@users.org, user2@users.org]
+
+You can also decide to use both methods (to be sure that someone receive email if remote file fails to be fetched), for example:
+  ExceptionNotifier.fetch_exception_recipients('http://foo.url/users.yml')
+  ExceptionNotifier.exception_recipients = %w(backup@users.org)
+The order is important because the second assignment is executed just if the first failed.
 
 And that's it! The defaults take care of the rest.
 
