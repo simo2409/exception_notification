@@ -51,6 +51,21 @@ class ExceptionNotifier < ActionMailer::Base
                   :rails_root => rails_root, :data => data,
                   :sections => sections })
   end
+  
+  def self.fetch_exception_recipients(url)
+    if url
+      begin
+        @@exception_recipients = YAML::load(open(url))
+      rescue
+        @@exception_recipients = []
+      end
+      logger.warn("EXCEPTION NOTIFICATION WARNING: You loaded exception_notification plugin but there are no exception recipients (I hope you set exception_recipients=).") if @@exception_recipients.empty?
+    end
+  end
+  
+  def self.exception_recipients=(recipients)
+    @@exception_recipients = recipients if @@exception_recipients.empty?
+  end
 
   private
 

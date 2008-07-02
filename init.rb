@@ -1,1 +1,3 @@
-require "action_mailer"
+require 'action_mailer'
+require 'open-uri'
+require 'YAML'
